@@ -10,10 +10,11 @@ const state = reactive({
     picList: [],
     recommendL: [],
     config: {} as any,
+    currentUrl: window.location.origin,
     baseUrl: 'https://9z6wbhg0afsd.xyz/uploads/'
 })
 
-const clickArrow = function (type: any) {//
+const clickArrow = function (type: any) {
     if (type === 'l') swiper.value.prev()
     if (type === 'r') swiper.value.next()
 }
@@ -42,7 +43,7 @@ const download = function (item: any) {
     let app_type = type === "iOS" ? 2 : 1
     axios({
         method: 'post',
-        url: 'https://9z6wbhg0afsd.xyz/api/addDownload',
+        url: state.currentUrl + '/api/addDownload',
         data: {
             app_id: item.id,
             type: app_type,   //(1安卓,2IOS)
@@ -55,7 +56,7 @@ const download = function (item: any) {
 const getBannerList = function () {
     axios({
         method: 'post',
-        url: 'https://9z6wbhg0afsd.xyz/api/products',
+        url: state.currentUrl + '/api/products',
         data: {
             pagesize: 1000,
             type: '1',   //产品类型 1:轮播,2:列表,3:推荐
@@ -63,12 +64,12 @@ const getBannerList = function () {
     }).then(res => {
         res?.data?.data?.data.forEach((item: any) => {
             item.product_img = state.baseUrl + item.product_img
-            state.bannerList.push(item as any)
+            state.bannerList.push(item)
         })
     });
     axios({
         method: 'post',
-        url: 'https://9z6wbhg0afsd.xyz/api/products',
+        url: state.currentUrl + '/api/products',
         data: {
             pagesize: 1000,
             type: '2',   //产品类型 1:轮播,2:列表,3:推荐
@@ -76,12 +77,12 @@ const getBannerList = function () {
     }).then(res => {
         res?.data?.data?.data.forEach((item: any) => {
             item.product_img = state.baseUrl + item.product_img
-            state.picList.push(item as any)
+            state.picList.push(item)
         })
     });
     axios({
         method: 'post',
-        url: 'https://9z6wbhg0afsd.xyz/api/products',
+        url: state.currentUrl + '/api/products',
         data: {
             pagesize: 1000,
             type: '3',   //产品类型 1:轮播,2:列表,3:推荐
@@ -89,12 +90,12 @@ const getBannerList = function () {
     }).then(res => {
         res?.data?.data?.data.forEach((item: any) => {
             item.product_img = state.baseUrl + item.product_img
-            state.recommendL.push(item as any)
+            state.recommendL.push(item)
         })
     });
     axios({
         method: 'post',
-        url: 'https://9z6wbhg0afsd.xyz/api/configs',
+        url: state.currentUrl + '/api/configs',
         // url: '/api/configs',
     }).then(res => {
         state.config = res?.data?.data
